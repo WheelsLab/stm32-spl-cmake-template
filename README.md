@@ -394,6 +394,32 @@ set(MCU_FLAGS "-mcpu=cortex-m3 -mthumb")
 
 编辑 `cmake/stm32f1-spl.cmake` 中的 `SPL_SOURCE` 列表。
 
+### 添加源文件
+
+编辑 `CMakeLists.txt` 中的 `SOURCES` 列表：
+
+```cmake
+set(SOURCES
+    source/main.c
+    core/startup_stm32f103xb.s
+    core/stm32f10x_it.c
+    core/syscalls.c
+    source/my_driver.c      # 新增源文件
+)
+```
+
+### 添加头文件搜索路径
+
+编辑 `CMakeLists.txt` 中的 `target_include_directories`：
+
+```cmake
+target_include_directories(${EXECUTABLE_NAME} PRIVATE
+    ${CMAKE_SOURCE_DIR}/source
+    ${CMAKE_SOURCE_DIR}/core
+    ${CMAKE_SOURCE_DIR}/my_include    # 新增头文件目录
+)
+```
+
 ## 支持的外设
 
 | 文件 | 主要功能 | 常用接口 |
