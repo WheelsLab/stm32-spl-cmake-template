@@ -21,3 +21,11 @@ set(CMAKE_ASM_FLAGS_INIT ${MCU_FLAGS})
 
 # 编译定义：STM32F10X 中等密度系列
 add_compile_definitions(STM32F10X_MD)
+
+# Debug 构建配置：无优化，完整调试信息
+set(CMAKE_C_FLAGS_DEBUG "-g3 -fno-omit-frame-pointer")
+set(CMAKE_CXX_FLAGS_DEBUG "-g3 -fno-omit-frame-pointer")
+
+# Release 构建配置：优化大小，基础调试信息
+set(CMAKE_C_FLAGS_RELEASE "-Os -g")
+set(CMAKE_CXX_FLAGS_RELEASE "-Os -g")

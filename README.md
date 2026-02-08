@@ -223,7 +223,7 @@ MEMORY
 }
 ```
 
-> **提示**：链接脚本 `.ld` 可通过 [STM32CubeMX](https://www.st.com/stm32cubemx) 工具生成和配置。
+> **提示**：链接脚本和启动代码可从 [ST 官方 GitHub](https://github.com/STMicroelectronics/cmsis-device-f1/tree/c8e9a4a4f16b6d2cb2a2083cbe5161025280fb22/Source/Templates/gcc) 获取，也可用 [STM32CubeMX](https://www.st.com/stm32cubemx) 工具生成。
 
 常见 section：
 - `.text` - 代码段
@@ -332,6 +332,8 @@ cmake --build build
 - 断点、单步调试
 - 变量查看
 - **外设寄存器视图**（需 SVD 文件）
+
+> **提示**：SVD 文件可从 [ST 官网](https://www.st.com/en/microcontrollers-microprocessors/stm32-32-bit-arm-cortex-mcus.html#cad-resources) 下载。
 
 启动调试：按 **F5** 或在运行面板选择配置。
 

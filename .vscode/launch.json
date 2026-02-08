@@ -15,7 +15,8 @@
             ],
             "svdFile": "${workspaceFolder}/vendor/STM32F103.svd",
             "runToEntryPoint": "main",
-            "stopOnEntry": false
+            "stopOnEntry": false,
+            "preLaunchTask": "Flash"
         },
     ]
 }
