@@ -49,6 +49,15 @@ sudo pacman -S arm-none-eabi-gcc arm-none-eabi-newlib openocd
 # 下载并安装 OpenOCD: https://github.com/openocd-org/openocd/releases
 ```
 
+### VSCode 配置
+
+推荐安装以下 VSCode 扩展：
+
+- **C/C++** (Microsoft) - 提供 IntelliSense 代码补全和语法高亮
+- **Cortex-Debug** - ARM 调试支持
+
+项目已包含 `.vscode/c_cpp_properties.json` 配置 IntelliSense，编译项目后会自动识别头文件路径和宏定义。
+
 ## 编译与链接选项
 
 本项目使用以下编译和链接选项优化代码体积和功能：
