@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "STM32F103",
+            "includePath": [
+                "${workspaceFolder}/source",
+                "${workspaceFolder}/core",
+                "${workspaceFolder}/vendor/STM32F10x_StdPeriph_Driver",
+                "${workspaceFolder}/vendor/STM32F10x_StdPeriph_Driver/inc",
+                "${workspaceFolder}/vendor/CMSIS",
+                "${workspaceFolder}/cmake"
+            ],
+            "defines": [
+                "STM32F10X_MD",
+                "USE_STDPERIPH_DRIVER"
+            ],
+            "compilerPath": "arm-none-eabi-gcc",
+            "cStandard": "c99",
+            "intelliSenseMode": "gcc-arm",
+            "compileCommands": "${workspaceFolder}/compile_commands.json"
+        }
+    ],
+    "version": 4
+}
