@@ -16,6 +16,22 @@
             "svdFile": "${workspaceFolder}/vendor/CMSIS/Device/ST/STM32F1xx/STM32F103xx.svd",
             "runToEntryPoint": "main",
             "stopOnEntry": false
+        },
+        {
+            "name": "OpenOCD Server Only",
+            "type": "cortex-debug",
+            "request": "attach",
+            "servertype": "openocd",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/stm32f103c8.elf",
+            "device": "STM32F103C8",
+            "configFiles": [
+                "interface/stlink.cfg",
+                "target/stm32f1x.cfg"
+            ],
+            "svdFile": "${workspaceFolder}/vendor/CMSIS/Device/ST/STM32F1xx/STM32F103xx.svd",
+            "stopOnEntry": false,
+            "noDebug": true
         }
     ]
 }
