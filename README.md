@@ -87,12 +87,12 @@ stm32-spl-cmake-template/
 │   ├── launch.json             # 调试配置
 │   └── tasks.json              # 任务配置
 ├── core/                       # 核心启动文件
-│   ├── startup_stm32f10x_md.s  # 启动文件
+│   ├── startup_stm32f103xb.s   # 启动文件
 │   ├── stm32f10x_it.c          # 中断处理
 │   ├── stm32f10x_it.h          # 中断头文件
 │   ├── stm32f10x_conf.h        # SPL 配置头文件
 │   ├── syscalls.c              # 系统调用
-│   └── STM32F103XX_FLASH.ld    # 链接脚本
+│   └── STM32F103XB_FLASH.ld    # 链接脚本
 ├── source/
 │   └── main.c                  # 主程序入口
 ├── vendor/
@@ -184,7 +184,7 @@ ARM 架构的 GDB 调试器，用于调试嵌入式程序。支持断点、单�
 
 | 选项 | 说明 |
 |------|------|
-| `-T core/STM32F103XX_FLASH.ld` | 指定链接脚本，定义内存布局 |
+| `-T core/STM32F103XB_FLASH.ld` | 指定链接脚本，定义内存布局 |
 | `-u _printf_float` | 启用浮点数打印支持 |
 
 ### newlib-nano
