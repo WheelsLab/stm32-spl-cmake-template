@@ -7,28 +7,47 @@
 ## 特性
 
 - **CMake 构建系统** - 支持 Debug/Release 构建类型
+- **CMake Presets** 多配置支持（Ninja 默认，Make 可选）
 - **ARM GCC 交叉编译** - 完整的工具链配置
 - **STM32F10x SPL** - 包含全部 23 个外设驱动
 - **VSCode 集成** - IntelliSense、调试、外设寄存器视图
 - **OpenOCD 支持** - 烧录和调试功能
 - **CMSIS 核心** - 标准化的 ARM Cortex-M 接口
 
-## 快速开始
+## 前置条件
+
+### 工具链安装
 
 ```bash
-# Debug 构建（用于调试）
-cmake -Bbuild -DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-toolchain.cmake -DCMAKE_BUILD_TYPE=Debug
-cmake --build build
+# Ubuntu/Debian
+sudo apt install gcc-arm-none-eabi openocd ninja-build
 
-# Release 构建（用于生产）
-cmake -Bbuild -DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-toolchain.cmake -DCMAKE_BUILD_TYPE=Release
-cmake --build build
+# macOS (Homebrew)
+brew install --cask gcc-arm-embedded openocd ninja
 
-# 烧录固件
-cmake --build build --target flash
+# Arch Linux
+sudo pacman -S arm-none-eabi-gcc arm-none-eabi-newlib openocd ninja
 
-# 启动调试服务器
-cmake --build build --target debug
+# Windows
+# 下载并安装 ARM GCC: https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm
+# 下载并安装 OpenOCD: https://github.com/openocd-org/openocd/releases
+# 下载并安装 Ninja: https://github.com/ninja-build/ninja/releases
+```
+
+### 快速开始
+
+```bash
+# 1. 查看可用构建配置
+cmake --list-presets
+
+# 2. 配置项目（推荐 Ninja Release）
+cmake --preset release
+
+# 3. 编译
+cmake --build build/release
+
+# 4. 烧录到芯片
+cmake --build build/release --target flash
 ```
 
 ## 示例代码：LED 闪烁
@@ -81,6 +100,7 @@ int main(void) {
 ```
 stm32-spl-cmake-template/
 ├── CMakeLists.txt              # 主 CMake 配置文件
+├── CMakePresets.json           # CMake 预设配置
 ├── cmake/
 │   ├── stm32f1-spl.cmake       # SPL 库配置
 │   └── gcc-arm-toolchain.cmake # ARM 工具链配置
@@ -106,36 +126,9 @@ stm32-spl-cmake-template/
 └── README.md
 ```
 
-## 工具链
+## 工具链说明
 
-### 一键安装
-
-**Ubuntu/Debian**
-
-```bash
-sudo apt install gcc-arm-none-eabi gdb openocd cmake
-```
-
-**Arch Linux**
-
-```bash
-sudo pacman -S arm-none-eabi-gcc arm-none-eabi-gdb arm-none-eabi-newlib openocd cmake
-```
-
-**macOS**
-
-```bash
-brew install --cask gcc-arm-embedded openocd cmake
-```
-
-**Windows**
-
-下载并安装以下工具：
-- ARM GCC: https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm
-- OpenOCD: https://github.com/openocd-org/openocd/releases
-- CMake: https://cmake.org/download/
-
-### 工具说明
+### 编译和构建
 
 #### arm-none-eabi-gcc / g++ / as / ld / ar
 
@@ -161,14 +154,30 @@ ARM 架构的 GDB 调试器，用于调试嵌入式程序。支持断点、单�
 
 跨平台构建系统，通过 `CMakeLists.txt` 生成 Makefile 或 Ninja 构建文件，管理编译过程和依赖关系。
 
-### VSCode 扩展
+### VSCode 配置
 
-- **C/C++** - IntelliSense 代码补全
-- **Cortex-Debug** - ARM 调试支持
+推荐安装以下 VSCode 扩展：
+
+| 扩展 | 功能 |
+|------|------|
+| **C/C++** (Microsoft) | IntelliSense 代码补全和语法高亮 |
+| **Cortex-Debug** | ARM 调试支持 |
+| **CMake Tools** | CMake 项目管理和构建 |
 
 项目已配置 `.vscode/c_cpp_properties.json`，编译后自动识别头文件。
 
-## 前置条件
+#### CMake Tools 配置
+
+若使用 CMake Tools 扩展，建议在 `settings.json` 中添加：
+
+```json
+{
+    "cmake.usePresets": "always",
+    "cmake.ignoreKitSel": true
+}
+```
+
+确保 CMake Tools 版本 >= 1.9 以支持 Presets。
 
 ## 编译与链接选项
 
@@ -292,16 +301,52 @@ MEMORY
 
 ## 编译项目
 
-### 1. 配置 CMake
+### 使用 CMake Presets
 
 ```bash
-cmake -Bbuild -DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-toolchain.cmake
+# 查看可用预设
+cmake --list-presets
+
+# Ninja 构建（默认）
+cmake --preset release    # 推荐
+cmake --preset debug
+cmake --preset minsizerel
+
+# Make 构建（可选）
+cmake --preset make-release
+cmake --preset make-debug
+cmake --preset make-minsizerel
+
+# 编译
+cmake --build build/<preset>
+
+# 并行编译
+cmake --build build/<preset> --parallel $(nproc)
 ```
 
-### 2. 编译
+编译完成后，将在 `build/<preset>/` 目录下生成 `stm32f103c8.elf` 文件。
+
+### 手动构建
 
 ```bash
-cmake --build build
+# Ninja Release
+cmake -B build/release -G "Ninja Multi-Config" -DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-toolchain.cmake -DCMAKE_BUILD_TYPE=Release
+cmake --build build/release
+
+# Ninja Debug
+cmake -B build/debug -G "Ninja Multi-Config" -DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-toolchain.cmake -DCMAKE_BUILD_TYPE=Debug
+cmake --build build/debug
+
+# Make Release
+cmake -B build/release -DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-toolchain.cmake -DCMAKE_BUILD_TYPE=Release
+cmake --build build/release
+
+# Make Debug
+cmake -B build/debug -DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-toolchain.cmake -DCMAKE_BUILD_TYPE=Debug
+cmake --build build/debug
+
+# 并行编译
+cmake --build build/<preset> --parallel $(nproc)
 ```
 
 编译完成后，将在 `build/` 目录下生成 `stm32f103c8.elf` 文件。
@@ -311,7 +356,7 @@ cmake --build build
 使用 OpenOCD 烧录到目标芯片：
 
 ```bash
-cmake --build build --target flash
+cmake --build build/<preset> --target flash
 ```
 
 此命令会使用 ST-Link 通过 SWD 接口烧录固件，并自动验证和复位。
@@ -323,8 +368,8 @@ cmake --build build --target flash
 调试前请使用 Debug 构建模式，以保留完整的调试信息：
 
 ```bash
-cmake -Bbuild -DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-toolchain.cmake -DCMAKE_BUILD_TYPE=Debug
-cmake --build build
+cmake -Bbuild/cortex-debug -DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-toolchain.cmake -DCMAKE_BUILD_TYPE=Debug
+cmake --build build/cortex-debug
 ```
 
 ### VSCode 调试
@@ -389,7 +434,7 @@ set(EXECUTABLE_NAME stm32f103c8)
 在 `cmake/gcc-arm-toolchain.cmake` 中调整 MCU 标志：
 
 ```cmake
-set(MCU_FLAGS "-mcpu=cortex-m3 -mthumb")
+set(CMAKE_C_FLAGS_INIT "-mcpu=cortex-m3 -mthumb")
 ```
 
 ### 添加/移除 SPL 外设

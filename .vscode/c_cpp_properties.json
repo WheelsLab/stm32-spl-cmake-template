@@ -17,7 +17,7 @@
             "compilerPath": "arm-none-eabi-gcc",
             "cStandard": "c99",
             "intelliSenseMode": "gcc-arm",
-            "compileCommands": "${workspaceFolder}/compile_commands.json"
+            "compileCommands": "${workspaceFolder}/build/cortex-debug/compile_commands.json"
         }
     ],
     "version": 4

@@ -4,14 +4,14 @@
     {
       "label": "Configure Debug",
       "type": "shell",
-      "command": "cmake -B build -DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-toolchain.cmake -DCMAKE_BUILD_TYPE=Debug",
+      "command": "cmake -B build/cortex-debug -DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-toolchain.cmake -DCMAKE_BUILD_TYPE=Debug",
       "problemMatcher": ["$gcc"],
       "group": "none"
     },
     {
       "label": "Build Debug",
       "type": "shell",
-      "command": "cmake --build build --config Debug",
+      "command": "cmake --build build/cortex-debug --parallel $(nproc)",
       "dependsOn": "Configure Debug",
       "problemMatcher": ["$gcc"],
       "group": "build"
@@ -19,7 +19,7 @@
     {
       "label": "Flash",
       "type": "shell",
-      "command": "cmake --build build --target flash",
+      "command": "cmake --build build/cortex-debug --target flash",
       "dependsOn": "Build Debug",
       "problemMatcher": [],
       "group": "none"
@@ -27,7 +27,7 @@
     {
       "label": "OpenOCD Server",
       "type": "shell",
-      "command": "cmake --build build --target debug",
+      "command": "cmake --build build/cortex-debug --target debug",
       "isBackground": true,
       "problemMatcher": []
     }
