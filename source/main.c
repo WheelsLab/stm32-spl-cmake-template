@@ -14,6 +14,7 @@
 */
 
 #include "stm32f10x.h"
+#include "delay.h"
 
 
 int main(void) {
@@ -27,12 +28,12 @@ int main(void) {
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;	// IO 最大输出速度
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
 	
+	delay_init();
+	
 	while(1){
-		// GPIO_SetBits(GPIOC, GPIO_Pin_13);
-		// GPIO_ResetBits(GPIOC, GPIO_Pin_13);
 		GPIO_WriteBit(GPIOC, GPIO_Pin_13, Bit_RESET); // 亮
-		for (uint32_t i = 0; i < 10000000; i++);
+		delay_ms(200);
 		GPIO_WriteBit(GPIOC, GPIO_Pin_13, Bit_SET); // 灭
-		for (uint32_t i = 0; i < 10000000; i++);
+		delay_ms(1500);
 	};
 }

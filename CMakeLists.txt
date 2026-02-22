@@ -17,6 +17,7 @@ set(SOURCES
     core/startup_stm32f103xb.s
     core/stm32f10x_it.c
     core/syscalls.c
+    source/utils/src/delay.c
     )
 
 # 可执行文件名称
@@ -41,6 +42,7 @@ target_link_options(${EXECUTABLE_NAME} PRIVATE
 # 头文件搜索路径
 target_include_directories(${EXECUTABLE_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/source
+    ${CMAKE_SOURCE_DIR}/source/utils/inc
     ${CMAKE_SOURCE_DIR}/core
 )
 

@@ -131,13 +131,13 @@ void PendSV_Handler(void)
 {
 }
 
+extern volatile uint32_t sys_tick_counter;
 /**
-  * @brief  This function handles SysTick Handler.
-  * @param  None
-  * @retval None
-  */
-void SysTick_Handler(void)
-{
+ * @brief SysTick 中断服务函数
+ * @note 每 1ms 触发一次，递增 sys_tick_counter
+ */
+void SysTick_Handler(void) {
+    sys_tick_counter++;
 }
 
 /******************************************************************************/
